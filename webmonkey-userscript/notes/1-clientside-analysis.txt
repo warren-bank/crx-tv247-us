@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 
 http://tv247.us/
+http://tv247.us/all-channels/
 
 --------------------------------------------------------------------------------
 // view-source:http://tv247.us/watch/espn/
@@ -11,5 +12,21 @@ const baseUrl = "http://cdn.tv247.us/channel/";
 var channelName = "espn1";
 var link= baseUrl + channelName + ".m3u8";
  console.log(link);
+
+--------------------------------------------------------------------------------
+// view-source:http://tv247.us/watch/msnbc/
+
+<script>jwplayer.key="eNFaXCjyURVoCCGiHp7HTQ3hDhE/AfL0g8VE1fRbL84=";
+  var player = jwplayer('vvv');
+  var sv=""; 
+  var channelName = "msnbc"; 
+  var baseUrl ="";
+  if (sv == '') {
+    baseUrl = "http://live.tv247.club/live/";
+  }
+   else {
+    baseUrl = sv;
+   }   
+var link= baseUrl + channelName + ".m3u8";
 
 --------------------------------------------------------------------------------

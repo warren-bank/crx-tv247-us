@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tv247.us
 // @description  Watch videos in external player.
-// @version      1.0.0
+// @version      1.0.1
 // @match        *://tv247.us/watch/*
 // @match        *://*.tv247.us/watch/*
 // @icon         https://i0.wp.com/tv247.us/wp-content/uploads/2020/08/thumb247.png
@@ -234,22 +234,26 @@ var resolve_url = function(url) {
 }
 
 var process_page = function() {
-  var regex, scripts, script, video_url
+  var regex, scripts, script, matches, video_url
 
   regex = {
     whitespace: /[\r\n\t]+/g,
-    video_url:  /^.*baseUrl\s*=\s*["']([^"']+)["'].*channelName\s*=\s*["']([^"']+)["'].*link\s*=\s*baseUrl\s*\+\s*channelName\s*\+\s*["']([^"']+)["'].*$/
+    video_url:  /^.*(baseUrl|channelName)\s*=\s*["']([^"']+)["'].*(?:baseUrl|channelName)\s*=\s*["']([^"']+)["'].*link\s*=\s*baseUrl\s*\+\s*channelName\s*\+\s*["']([^"']+)["'].*$/
   }
 
   scripts = unsafeWindow.document.querySelectorAll('script:not([src])')
 
   for (var i=0; i < scripts.length; i++) {
-    script = scripts[i]
-    script = script.innerHTML
-    script = script.replace(regex.whitespace, ' ').trim()
+    script  = scripts[i]
+    script  = script.innerHTML
+    script  = script.replace(regex.whitespace, ' ').trim()
+    matches = regex.video_url.exec(script)
 
-    if (regex.video_url.test(script)) {
-      video_url = script.replace(regex.video_url, '$1$2$3')
+    if (matches) {
+      video_url = (matches[1] === 'baseUrl')
+        ? matches[2] + matches[3] + matches[4]
+        : matches[3] + matches[2] + matches[4]
+
       video_url = resolve_url(video_url)
       break
     }
